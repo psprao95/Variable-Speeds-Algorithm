@@ -16,7 +16,7 @@ class Process implements Callable{
 	this.token=token;
 	this.status=status;
 	this.map=map;
-	
+	System.out.println("Hi I am process "+uid);
 
 }
 	public int getUniqueID()
@@ -27,8 +27,12 @@ class Process implements Callable{
 	@Override
 	public Object call() throws Exception
 	{
-
-		System.out.println("Hi I am process "+uid);
+		if(!this.status.equals("unknown"))
+				{
+			System.out.println("Process "+uid+" Status: "+this.status);
+			return this;
+				}
+		System.out.println("Process "+uid+" is running...");
 		sendMessages();
 		Thread.sleep(3000);
 		changeState();
@@ -49,7 +53,7 @@ class Process implements Callable{
 			token.decrementWaitingRounds();
 			map.put(uid, null);
 		}
-		System.out.println("Process UID "+this.uid+" Status: "+this.status);
+		System.out.println("Process UID: "+this.uid+" Operation: Sending Messages, Status: "+this.status);
 	}
 	
 	public void changeState()
@@ -69,7 +73,7 @@ class Process implements Callable{
 				}
 			}
 			
-			System.out.println("Process UID "+this.uid+" Status: "+this.status);
+			System.out.println("Process UID: "+this.uid+" Operation: Changing State, Status: "+this.status);
 		}
 	}
 }

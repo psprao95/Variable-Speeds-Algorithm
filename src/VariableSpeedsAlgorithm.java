@@ -1,10 +1,9 @@
 
 import java.io.File;
-import java.io.FileReader;
-import java.util.stream.*;
+
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
+
 import java.util.Scanner;
 import java.util.concurrent.*;
 
@@ -27,6 +26,7 @@ public class VariableSpeedsAlgorithm {
 				uids[i]=scanner.nextInt();
 				
 			}
+			scanner.close();
 			System.out.println("Input UIDs of processes: "+Arrays.toString(uids));
 			
 		
@@ -70,12 +70,20 @@ public class VariableSpeedsAlgorithm {
 			for(int i=0;i<noOfThreads;i++)
 			{
 				Process process=future[i].get();
-				
+				if(leader_found.equals("yes")&& process.status.equals("unknown"))
+				{
+					process.status="non-leader";
+				}
 			future[i]=new FutureTask<Process>(process);
 			}
 		}
 		
-		System.out.println("The process with UID "+leader_id+"is elected");
+		for(int i=0;i<noOfThreads;i++)
+		{
+			new Thread(future[i]).start();
+		}
+		
+		
 			
 			
 		} catch (Exception e) {
